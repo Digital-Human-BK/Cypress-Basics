@@ -40,8 +40,8 @@ describe("My first suite", () => {
     cy.get('[data-cy="imputEmail1"]');
   });
 
-  //only runs this test only
-  it.only("second test", () => {
+  //only runs this test
+  it("second test", () => {
     cy.visit("/");
     cy.contains("Forms").click();
     cy.contains("Form Layouts").click();
@@ -71,5 +71,45 @@ describe("My first suite", () => {
       .click();
 
     cy.contains("nb-card", "Horizontal form").find('[type="email"]');
+  });
+
+  it.only("then and wrap methods", () => {
+    cy.visit("/");
+    cy.contains("Forms").click();
+    cy.contains("Form Layouts").click();
+
+    cy.contains("nb-card", "Using the Grid")
+      .find('[for="inputEmail1"]')
+      .should("contain", "Email");
+    cy.contains("nb-card", "Using the Grid")
+      .find('[for="inputPassword2"]')
+      .should("contain", "Password");
+
+    cy.contains("nb-card", "Basic form")
+      .find('[for="exampleInputEmail1"]')
+      .should("contain", "Email address");
+    cy.contains("nb-card", "Basic form")
+      .find('[for="exampleInputPassword1"]')
+      .should("contain", "Password");
+
+    cy.contains("nb-card", "Using the Grid").then((firstElement) => {
+      const emailLabel = firstElement.find('[for="inputEmail1"]').text();
+      const passwordLabel = firstElement.find('[for="inputPassword2"]').text();
+      expect(emailLabel).to.equal("Email");
+      expect(passwordLabel).to.equal("Password");
+
+      cy.contains("nb-card", "Basic form").then((secondElement) => {
+        // The .then cb parameters are JQuery objects and are using chai methods
+        const passwordLabelSecond = secondElement
+          .find('[for="exampleInputPassword1"]')
+          .text();
+        expect(passwordLabel).to.equal(passwordLabelSecond);
+
+        //to change the context back to cypress - use .wrap() around the JQ object
+        cy.wrap(secondElement)
+          .find('[for="exampleInputPassword1"]')
+          .should("contain", "Password");
+      });
+    });
   });
 });
