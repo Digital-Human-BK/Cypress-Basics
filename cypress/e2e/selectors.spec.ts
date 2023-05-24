@@ -41,7 +41,7 @@ describe("My first suite", () => {
   });
 
   //only runs this test
-  it("second test", () => {
+  it.only("second test", () => {
     cy.visit("/");
     cy.contains("Forms").click();
     cy.contains("Form Layouts").click();
@@ -73,7 +73,7 @@ describe("My first suite", () => {
     cy.contains("nb-card", "Horizontal form").find('[type="email"]');
   });
 
-  it.only("then and wrap methods", () => {
+  it("then and wrap methods", () => {
     cy.visit("/");
     cy.contains("Forms").click();
     cy.contains("Form Layouts").click();
