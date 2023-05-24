@@ -39,4 +39,37 @@ describe("My first suite", () => {
     //THE MOST RECOMMENDED WAY BY CYPRESS
     cy.get('[data-cy="imputEmail1"]');
   });
+
+  //only runs this test only
+  it.only("second test", () => {
+    cy.visit("/");
+    cy.contains("Forms").click();
+    cy.contains("Form Layouts").click();
+
+    cy.get('[data-cy="signInBtn"]');
+
+    cy.contains("Sign in");
+
+    //getting specific element among elements with same text content
+    cy.contains('[status="warning"]', "Sign in");
+
+    //find element by parent relation
+    cy.get("#inputEmail3").parents("form").find("button");
+    //same as above but with added assertion
+    cy.get("#inputEmail3")
+      .parents("form")
+      .find("button")
+      .should("contain", "Sign in");
+
+    //traveling back to parent and then finding child
+    cy.get("#inputEmail3")
+      .parents("form")
+      .find("button")
+      .should("contain", "Sign in")
+      .parents("form")
+      .find("nb-checkbox")
+      .click();
+
+    cy.contains("nb-card", "Horizontal form").find('[type="email"]');
+  });
 });
