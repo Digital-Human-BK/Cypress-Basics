@@ -66,6 +66,7 @@ describe("Elements suite", () => {
         let dateAssert = selectDayFromCurrent(200);
 
         cy.wrap(input).invoke("prop", "value").should("contain", dateAssert);
+        cy.wrap(input).should("have.value", dateAssert);
       });
   });
 

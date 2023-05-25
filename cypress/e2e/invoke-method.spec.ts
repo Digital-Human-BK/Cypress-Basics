@@ -8,7 +8,8 @@ describe("Invoke suite", () => {
 
     cy.get('[data-cy="labelForEmail1"]')
       .should("contain", "Email address")
-      .should("have.class", "label");
+      .should("have.class", "label")
+      .and("have.text", "Email address");
 
     cy.get('[data-cy="labelForEmail1"]').then((label) => {
       expect(label.text()).to.equal("Email address");
