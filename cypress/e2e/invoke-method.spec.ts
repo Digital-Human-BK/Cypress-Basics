@@ -1,12 +1,14 @@
 /// <reference types="cypress" />
 
 describe("Invoke suite", () => {
-  it("Invoke command", () => {
+  it.only("Invoke command", () => {
     cy.visit("/");
     cy.contains("Forms").click();
     cy.contains("Form Layouts").click();
 
-    cy.get('[data-cy="labelForEmail1"]').should("contain", "Email address");
+    cy.get('[data-cy="labelForEmail1"]')
+      .should("contain", "Email address")
+      .should("have.class", "label");
 
     cy.get('[data-cy="labelForEmail1"]').then((label) => {
       expect(label.text()).to.equal("Email address");
@@ -29,7 +31,7 @@ describe("Invoke suite", () => {
       });
   });
 
-  it.only("Invoke command", () => {
+  it("Invoke command", () => {
     cy.visit("/");
     cy.contains("Forms").click();
     cy.contains("Datepicker").click();
