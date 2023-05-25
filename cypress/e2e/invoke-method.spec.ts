@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe("Second suite", () => {
+describe("Invoke suite", () => {
   it("Invoke command", () => {
     cy.visit("/");
     cy.contains("Forms").click();

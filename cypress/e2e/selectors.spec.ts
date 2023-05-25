@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe("My first suite", () => {
+describe("Selectors suite", () => {
   it("first test", () => {
     //provide a URL for Cypress to visit
     //I have default URL set, so we pass only '/'

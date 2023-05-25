@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe("Second suite", () => {
+describe("Elements suite", () => {
   it("Radio buttons", () => {
     cy.visit("/");
     cy.contains("Forms").click();
@@ -20,12 +20,52 @@ describe("Second suite", () => {
       });
   });
 
-  it.only("Checkboxes", () => {
+  it("Checkboxes", () => {
     cy.visit("/");
     cy.contains("Modal & Overlays").click();
     cy.contains("Toastr").click();
 
     cy.get('[type="checkbox"]').check({ force: true });
     cy.get('[type="checkbox"]').eq(0).uncheck({ force: true });
+  });
+
+  it.only("Datepickers", () => {
+    cy.visit("/");
+    cy.contains("Forms").click();
+    cy.contains("Datepicker").click();
+
+    function selectDayFromCurrent(days: number) {
+      let date = new Date();
+      date.setDate(date.getDate() + days);
+      let futureDay = date.getDate();
+      let futureMonth = date.toLocaleString("default", {
+        month: "short",
+      });
+      let dateAssert = `${futureMonth} ${futureDay}, ${date.getFullYear()}`;
+
+      cy.get("nb-calendar-navigation")
+        .invoke("attr", "ng-reflect-date")
+        .then((dateAttribute) => {
+          if (!dateAttribute.includes(futureMonth)) {
+            cy.get('[data-name="chevron-right"]').click();
+            selectDayFromCurrent(days);
+          } else {
+            cy.get('nb-calendar-day-picker [class="day-cell ng-star-inserted"]')
+              .contains(futureDay)
+              .click();
+          }
+        });
+
+      return dateAssert;
+    }
+
+    cy.contains("nb-card", "Common Datepicker")
+      .find("input")
+      .then((input) => {
+        cy.wrap(input).click();
+        let dateAssert = selectDayFromCurrent(200);
+
+        cy.wrap(input).invoke("prop", "value").should("contain", dateAssert);
+      });
   });
 });
