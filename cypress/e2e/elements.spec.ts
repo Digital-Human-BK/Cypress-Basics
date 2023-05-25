@@ -29,7 +29,7 @@ describe("Elements suite", () => {
     cy.get('[type="checkbox"]').eq(0).uncheck({ force: true });
   });
 
-  it.only("Datepickers", () => {
+  it("Datepickers", () => {
     cy.visit("/");
     cy.contains("Forms").click();
     cy.contains("Datepicker").click();
@@ -67,5 +67,45 @@ describe("Elements suite", () => {
 
         cy.wrap(input).invoke("prop", "value").should("contain", dateAssert);
       });
+  });
+
+  it.only("Lists and Dropdowns", () => {
+    cy.visit("/");
+
+    //1
+    // cy.get("nav nb-select").click();
+    // cy.get(".options-list").contains("Dark").click();
+    // cy.get("nav nb-select").should("contain", "Dark");
+    // cy.get("nb-layout-header nav").should(
+    //   "have.css",
+    //   "background-color",
+    //   "rgb(34, 43, 69)"
+    // );
+
+    //2
+    cy.get("nav nb-select").then((dropdown) => {
+      cy.wrap(dropdown).click();
+      cy.get(".options-list nb-option").each((li, index, $collection) => {
+        const itemText = li.text().trim();
+
+        const colors = {
+          Light: "rgb(255, 255, 255)",
+          Dark: "rgb(34, 43, 69)",
+          Cosmic: "rgb(50, 50, 89)",
+          Corporate: "rgb(255, 255, 255)",
+        };
+
+        cy.wrap(li).click();
+        cy.wrap(dropdown).should("contain", itemText);
+        cy.get("nb-layout-header nav").should(
+          "have.css",
+          "background-color",
+          colors[itemText]
+        );
+        if (index < $collection.length - 1) {
+          cy.wrap(dropdown).click();
+        }
+      });
+    });
   });
 });
