@@ -69,7 +69,7 @@ describe("Elements suite", () => {
       });
   });
 
-  it.only("Lists and Dropdowns", () => {
+  it("Lists and Dropdowns", () => {
     cy.visit("/");
 
     //1
@@ -104,6 +104,60 @@ describe("Elements suite", () => {
         );
         if (index < $collection.length - 1) {
           cy.wrap(dropdown).click();
+        }
+      });
+    });
+  });
+
+  it.only("Tables and rows", () => {
+    cy.visit("/");
+    cy.contains("Tables & Data").click();
+    cy.contains("Smart Table").click();
+
+    //1 Editing a row
+    cy.get("tbody")
+      .contains("tr", "Larry")
+      .then((tr) => {
+        cy.wrap(tr).find(".nb-edit").click();
+        cy.wrap(tr).find('[placeholder="Age"]').clear().type("35");
+        cy.wrap(tr).find(".nb-checkmark").click();
+        cy.wrap(tr).find("td").eq(6).should("contain", "35");
+      });
+
+    //2 Adding new row
+    cy.get("thead").find(".nb-plus").click();
+    cy.get("thead")
+      .find("tr")
+      .eq(2)
+      .then((tr) => {
+        cy.wrap(tr).find('[placeholder="ID"]').type("99");
+        cy.wrap(tr).find('[placeholder="First Name"]').type("Mike");
+        cy.wrap(tr).find('[placeholder="Last Name"]').type("Shinoda");
+        cy.wrap(tr).find('[placeholder="Username"]').type("MikeLP");
+        cy.wrap(tr).find(".nb-checkmark").click();
+      });
+
+    cy.get("tbody tr")
+      .first()
+      .find("td")
+      .then((td) => {
+        cy.wrap(td).eq(1).should("contain", "99");
+        cy.wrap(td).eq(2).should("contain", "Mike");
+        cy.wrap(td).eq(3).should("contain", "Shinoda");
+        cy.wrap(td).eq(4).should("contain", "MikeLP");
+      });
+
+    //3 Searching for a row
+    const testAge = [20, 35, 40, 200];
+
+    cy.wrap(testAge).each((age) => {
+      cy.get('thead [placeholder="Age"]').clear().type(`${age}`);
+      cy.wait(500);
+      cy.get("tbody tr").each((tr) => {
+        if (Number(age) > 120) {
+          cy.wrap(tr).should("contain", "No data found");
+        } else {
+          cy.wrap(tr).find("td").eq(6).should("contain", `${age}`);
         }
       });
     });
