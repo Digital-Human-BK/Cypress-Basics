@@ -109,7 +109,7 @@ describe("Elements suite", () => {
     });
   });
 
-  it.only("Tables and rows", () => {
+  it("Tables and rows", () => {
     cy.visit("/");
     cy.contains("Tables & Data").click();
     cy.contains("Smart Table").click();
@@ -161,5 +161,14 @@ describe("Elements suite", () => {
         }
       });
     });
+  });
+
+  it.only("Tooltips and popups", () => {
+    cy.visit("/");
+    cy.contains("Modal & Overlays").click();
+    cy.contains("Tooltip").click();
+
+    cy.contains("nb-card", "Colored Tooltips").contains("Default").click();
+    cy.get("nb-tooltip").should("contain", "This is a tooltip");
   });
 });
