@@ -35,3 +35,7 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add("openIndexPage" as keyof Cypress.Chainable<any>, () => {
+  cy.visit("/");
+});
